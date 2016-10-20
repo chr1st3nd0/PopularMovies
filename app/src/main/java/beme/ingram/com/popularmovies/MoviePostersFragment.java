@@ -21,7 +21,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import beme.ingram.com.popularmovies.asyncs.MoviePosterTask;
+import beme.ingram.com.popularmovies.adapters.PoserAdapter;
 import beme.ingram.com.popularmovies.models.Movie;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +41,7 @@ public class MoviePostersFragment extends Fragment {
 
     View rootView;
     @BindView(R.id.poster_recycler)RecyclerView posterRecycler;
+    PoserAdapter poserAdapter;
 
 
 
@@ -56,7 +57,6 @@ public class MoviePostersFragment extends Fragment {
         movies = new ArrayList<>();
 
         RunVolley();
-        new MoviePosterTask(getActivity()).execute();
         posterRecycler.setLayoutManager(new GridLayoutManager(getActivity(),2));
         posterRecycler.setHasFixedSize(true);
 
@@ -81,6 +81,9 @@ public class MoviePostersFragment extends Fragment {
                                 JSONObject jObj = ja_data.getJSONObject(i);
                                 movies.add(new Movie(jObj));
                             }
+                            poserAdapter = new PoserAdapter(getActivity(),movies);
+                            posterRecycler.setAdapter(poserAdapter);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
