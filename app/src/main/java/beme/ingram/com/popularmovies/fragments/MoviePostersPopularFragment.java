@@ -1,4 +1,4 @@
-package beme.ingram.com.popularmovies;
+package beme.ingram.com.popularmovies.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import beme.ingram.com.popularmovies.R;
 import beme.ingram.com.popularmovies.adapters.PoserAdapter;
 import beme.ingram.com.popularmovies.models.Movie;
 import butterknife.BindView;
@@ -29,13 +30,12 @@ import butterknife.ButterKnife;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MoviePostersFragment extends Fragment {
+public class MoviePostersPopularFragment extends Fragment {
 
     private static final String IMDB_URL = "http://api.themoviedb.org/3";
     private static final String POPULAR_URL = "/movie/popular";
     private static final String TOP_RATED_URL = "/movie/top_rated";
     private static final String API_URL = "?api_key=";
-    private static final String API_KEY = "";
 
     ArrayList<Movie> movies;
 
@@ -43,9 +43,7 @@ public class MoviePostersFragment extends Fragment {
     @BindView(R.id.poster_recycler)RecyclerView posterRecycler;
     PoserAdapter poserAdapter;
 
-
-
-    public MoviePostersFragment() {
+    public MoviePostersPopularFragment() {
     }
 
     @Override
@@ -63,9 +61,11 @@ public class MoviePostersFragment extends Fragment {
         return rootView;
     }
 
+
     private void RunVolley() {
+        String apiKey = getActivity().getResources().getString(R.string.api_key);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, IMDB_URL + POPULAR_URL + API_URL + API_KEY, null, new Response.Listener<JSONObject>() {
+                (Request.Method.GET, IMDB_URL + POPULAR_URL + API_URL + apiKey, null, new Response.Listener<JSONObject>() {
 
                     JSONArray ja_data;
                     @Override
