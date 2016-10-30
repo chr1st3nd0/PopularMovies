@@ -79,7 +79,7 @@ public class MoviePostersPopularFragment extends Fragment {
                             for(int i=0; i<length; i++)
                             {
                                 JSONObject jObj = ja_data.getJSONObject(i);
-                                movies.add(new Movie(jObj));
+                                movies.add(new Movie(jObj,getActivity()));
                             }
                             poserAdapter = new PoserAdapter(getActivity(),movies);
                             posterRecycler.setAdapter(poserAdapter);

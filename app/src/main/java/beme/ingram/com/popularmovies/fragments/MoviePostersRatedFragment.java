@@ -1,9 +1,7 @@
 package beme.ingram.com.popularmovies.fragments;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -79,12 +77,10 @@ public class MoviePostersRatedFragment extends Fragment {
                         try {
                              ja_data = response.getJSONArray("results");
                             int length = response.length();
-
-
                             for(int i=0; i<length; i++)
                             {
                                 JSONObject jObj = ja_data.getJSONObject(i);
-                                movies.add(new Movie(jObj));
+                                movies.add(new Movie(jObj,getActivity()));
                             }
                             poserAdapter = new PoserAdapter(getActivity(),movies);
                             posterRecycler.setAdapter(poserAdapter);
