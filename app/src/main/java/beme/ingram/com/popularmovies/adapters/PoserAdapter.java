@@ -11,14 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.GlideBuilder;
-import com.bumptech.glide.load.DecodeFormat;
 
 import java.util.ArrayList;
 
 import beme.ingram.com.popularmovies.R;
 import beme.ingram.com.popularmovies.models.Movie;
-import beme.ingram.com.popularmovies.models.MyGlideModule;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -60,11 +57,9 @@ public class PoserAdapter extends RecyclerView.Adapter<PoserAdapter.ViewHolder> 
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-
-
 
         Display display = ((Activity)mContext).getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -73,10 +68,6 @@ public class PoserAdapter extends RecyclerView.Adapter<PoserAdapter.ViewHolder> 
         int height = size.y / 2;
         holder.posterImage.requestLayout();
 
-                /*
-                    getLayoutParams()
-                        Get the LayoutParams associated with this view.
-                */
 
         // Apply the new height for ImageView programmatically
         holder.posterImage.getLayoutParams().height = height;
@@ -86,17 +77,27 @@ public class PoserAdapter extends RecyclerView.Adapter<PoserAdapter.ViewHolder> 
 
         // Set the scale type for ImageView image scaling
         holder.posterImage.setScaleType(ImageView.ScaleType.FIT_XY);
-        MyGlideModule myGlideModule = new MyGlideModule();
-        myGlideModule.applyOptions(mContext,new GlideBuilder(mContext).setDecodeFormat(DecodeFormat.PREFER_ARGB_8888));
+
         Glide.with(mContext).load(mMovies.get(position).getPosterPath()).into(holder.posterImage);
 
+        holder.posterImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShowDetails showDetails = (ShowDetails)mContext;
+                showDetails.showDetails(mMovies.get(position));
+            }
+        });
+
     }
-
-
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return mMovies.size();
+    }
+
+    public interface ShowDetails
+    {
+        void showDetails(Movie movie);
     }
 }

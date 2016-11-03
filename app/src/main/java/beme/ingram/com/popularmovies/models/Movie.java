@@ -21,6 +21,7 @@ public class Movie {
     private static final String RELEASE_DATE = "release_date";
     private static final String TITLE = "title";
     private static final String VOTE_AVERAGE = "vote_average";
+    public static final String ID = "id";
     private static final String URL_IMAGE = "http://image.tmdb.org/t/p/";
 
 
@@ -38,6 +39,7 @@ public class Movie {
             setTitle(jsonObject.getString(TITLE));
             setVote_average(jsonObject.getString(VOTE_AVERAGE));
             setBackdropPath(jsonObject.getString(BACKDROP_PATH));
+            setId(jsonObject.getString(ID));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -52,6 +54,7 @@ public class Movie {
     String releaseDate;
     String title;
     String vote_average;
+    String id;
 
     public String getTitle() {
         return title;
@@ -107,5 +110,13 @@ public class Movie {
 
     public void setBackdropPath(String backdropPath) {
         this.backdropPath = backdropPath;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
