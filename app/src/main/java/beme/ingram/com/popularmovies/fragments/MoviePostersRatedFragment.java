@@ -78,7 +78,7 @@ public class MoviePostersRatedFragment extends Fragment {
 
                         try {
                             ja_data = response.getJSONArray(getActivity().getResources().getString(R.string.array_name));
-                            int length = response.length();
+                            int length = ja_data.length();
                             for(int i=0; i<length; i++)
                             {
                                 JSONObject jObj = ja_data.getJSONObject(i);
