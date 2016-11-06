@@ -1,5 +1,6 @@
 package beme.ingram.com.popularmovies.fragments;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -32,9 +33,8 @@ import butterknife.ButterKnife;
  */
 public class MoviePostersRatedFragment extends Fragment {
 
-    private static final String IMDB_URL = "http://api.themoviedb.org/3";
-    private static final String TOP_RATED_URL = "/movie/top_rated";
-    private static final String API_URL = "?api_key=";
+    private static final String IMDB_URL = "http://api.themoviedb.org/3/movie/top_rated?";
+    private static final String API_KEY = "api_key";
 
     ArrayList<Movie> movies;
 
@@ -56,7 +56,7 @@ public class MoviePostersRatedFragment extends Fragment {
 
 
 
-        RunVolley();
+        runVolley();
         posterRecycler.setLayoutManager(new GridLayoutManager(getActivity(),2));
         posterRecycler.setHasFixedSize(true);
 
@@ -64,18 +64,22 @@ public class MoviePostersRatedFragment extends Fragment {
     }
 
 
-
-    private void RunVolley() {
+    void runVolley()
+    {
         String apiKey = getActivity().getResources().getString(R.string.api_key);
+
+        Uri builtUri = Uri.parse(IMDB_URL).buildUpon()
+                .appendQueryParameter(API_KEY,apiKey).build();
+
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, IMDB_URL + TOP_RATED_URL + API_URL + apiKey, null, new Response.Listener<JSONObject>() {
+                (Request.Method.GET, builtUri.toString(), null, new Response.Listener<JSONObject>() {
 
                     JSONArray ja_data;
                     @Override
                     public void onResponse(JSONObject response) {
 
                         try {
-                             ja_data = response.getJSONArray("results");
+                            ja_data = response.getJSONArray("results");
                             int length = response.length();
                             for(int i=0; i<length; i++)
                             {
@@ -104,5 +108,6 @@ public class MoviePostersRatedFragment extends Fragment {
 // Access the RequestQueue through your singleton class.
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         queue.add(jsObjRequest);
+
     }
 }
