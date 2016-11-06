@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import beme.ingram.com.popularmovies.R;
+import beme.ingram.com.popularmovies.Utils;
 import beme.ingram.com.popularmovies.adapters.PoserAdapter;
 import beme.ingram.com.popularmovies.models.Movie;
 import butterknife.BindView;
@@ -32,9 +33,6 @@ import butterknife.ButterKnife;
  * A placeholder fragment containing a simple view.
  */
 public class MoviePostersRatedFragment extends Fragment {
-
-    private static final String IMDB_URL = "http://api.themoviedb.org/3/movie/top_rated?";
-    private static final String API_KEY = "api_key";
 
     ArrayList<Movie> movies;
 
@@ -68,8 +66,8 @@ public class MoviePostersRatedFragment extends Fragment {
     {
         String apiKey = getActivity().getResources().getString(R.string.api_key);
 
-        Uri builtUri = Uri.parse(IMDB_URL).buildUpon()
-                .appendQueryParameter(API_KEY,apiKey).build();
+        Uri builtUri = Uri.parse(Utils.IMDB_URL_RATED).buildUpon()
+                .appendQueryParameter(Utils.API_KEY,apiKey).build();
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, builtUri.toString(), null, new Response.Listener<JSONObject>() {
@@ -79,7 +77,7 @@ public class MoviePostersRatedFragment extends Fragment {
                     public void onResponse(JSONObject response) {
 
                         try {
-                            ja_data = response.getJSONArray("results");
+                            ja_data = response.getJSONArray(getActivity().getResources().getString(R.string.array_name));
                             int length = response.length();
                             for(int i=0; i<length; i++)
                             {

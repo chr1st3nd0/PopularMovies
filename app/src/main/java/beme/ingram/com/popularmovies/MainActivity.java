@@ -59,8 +59,8 @@ public class MainActivity extends AppCompatActivity implements PoserAdapter.Show
 
     private void setupViewPager(ViewPager viewPager) {
         TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
-        adapter.addFragment(new MoviePostersPopularFragment(), "Popular");
-        adapter.addFragment(new MoviePostersRatedFragment(), "Highest Rated");
+        adapter.addFragment(new MoviePostersPopularFragment(),getResources().getString(R.string.popular_rated_label));
+        adapter.addFragment(new MoviePostersRatedFragment(), getResources().getString(R.string.highest_rated_label));
         viewPager.setAdapter(adapter);
     }
 

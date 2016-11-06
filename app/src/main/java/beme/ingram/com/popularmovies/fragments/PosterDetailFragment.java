@@ -44,7 +44,7 @@ public class PosterDetailFragment extends Fragment {
         ButterKnife.bind(this,rootView);
         posterPath = getArguments().getString(Utils.POSTER_IMAGE);
         movieTitle.setText(getArguments().getString(Utils.TITLE));
-        releaseDate.setText(getArguments().getString(Utils.RELEASE_DATE));
+        releaseDate.setText( getActivity().getResources().getString(R.string.released_label)+ " " + Utils.formatDate(getArguments().getString(Utils.RELEASE_DATE)));
         synopsis.setText(getArguments().getString(Utils.OVERVIEW));
         voteAverage.setText(getArguments().getString(Utils.VOTE_AVERAGE));
 
@@ -63,7 +63,6 @@ public class PosterDetailFragment extends Fragment {
             @Override
             public void onGlobalLayout() {
 
-                ///getLocationOnScreen here
                 getPoster(view);
                 ViewTreeObserver obs = view.getViewTreeObserver();
                 obs.removeGlobalOnLayoutListener(this);
