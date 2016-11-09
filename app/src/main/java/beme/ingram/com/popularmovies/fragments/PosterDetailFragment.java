@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 
 import beme.ingram.com.popularmovies.R;
 import beme.ingram.com.popularmovies.Utils;
+import beme.ingram.com.popularmovies.models.MovieParceable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -42,11 +43,16 @@ public class PosterDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_poster_detail, container, false);
         ButterKnife.bind(this,rootView);
-        posterPath = getArguments().getString(Utils.POSTER_IMAGE);
-        movieTitle.setText(getArguments().getString(Utils.TITLE));
-        releaseDate.setText( getActivity().getResources().getString(R.string.released_label)+ " " + Utils.formatDate(getArguments().getString(Utils.RELEASE_DATE)));
-        synopsis.setText(getArguments().getString(Utils.OVERVIEW));
-        voteAverage.setText(getArguments().getString(Utils.VOTE_AVERAGE));
+
+        Bundle bundle = this.getArguments();
+
+        MovieParceable movieParceable = bundle.getParcelable("myData");
+
+        posterPath = movieParceable.getPoster_path();
+        movieTitle.setText(movieParceable.getTitle());
+        releaseDate.setText( getActivity().getResources().getString(R.string.released_label)+ " " + Utils.formatDate(movieParceable.getRelease_date()));
+        synopsis.setText(movieParceable.getOverview());
+        voteAverage.setText(movieParceable.getVote_average());
 
         afterRenderedPoster(movieImage);
 

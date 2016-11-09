@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import beme.ingram.com.popularmovies.fragments.PosterDetailFragment;
+import beme.ingram.com.popularmovies.models.MovieParceable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -29,17 +30,19 @@ public class PosterActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
-        Bundle extras = getIntent().getExtras();
-        getSupportActionBar().setTitle(extras.getString(Utils.TITLE));
+        MovieParceable movieParceable = getIntent().getParcelableExtra("myData");
+        getSupportActionBar().setTitle(movieParceable.getTitle());
 
-        backDropPath = extras.getString(Utils.BACKDROP);
+        backDropPath = movieParceable.getBackdrop_path();
 
         afterRenderedBackdrop(backDrop);
 
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.transparent));
 
         PosterDetailFragment posterDetailFragment = new PosterDetailFragment();
-        posterDetailFragment.setArguments(extras);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("myData",movieParceable);
+        posterDetailFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().add(R.id.poster_fragment,posterDetailFragment,null).commit();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

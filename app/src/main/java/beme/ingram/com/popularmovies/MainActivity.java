@@ -16,8 +16,8 @@ import beme.ingram.com.popularmovies.adapters.PoserAdapter;
 import beme.ingram.com.popularmovies.adapters.TabAdapter;
 import beme.ingram.com.popularmovies.fragments.MoviePostersPopularFragment;
 import beme.ingram.com.popularmovies.fragments.MoviePostersRatedFragment;
-import beme.ingram.com.popularmovies.fragments.PosterDetailFragment;
 import beme.ingram.com.popularmovies.models.Movie;
+import beme.ingram.com.popularmovies.models.MovieParceable;
 
 public class MainActivity extends AppCompatActivity implements PoserAdapter.ShowDetails {
 
@@ -88,25 +88,9 @@ public class MainActivity extends AppCompatActivity implements PoserAdapter.Show
 
     @Override
     public void showDetails(Movie movie) {
-        Bundle bundle = new Bundle();
-        bundle.putString(Utils.TITLE,movie.getTitle());
-        bundle.putString(Utils.BACKDROP,movie.getBackdropPath());
-        bundle.putString(Utils.POSTER_IMAGE,movie.getPosterPath());
-        bundle.putString(Utils.OVERVIEW,movie.getOverView());
-        bundle.putString(Utils.OVERVIEW,movie.getReleaseDate());
-        bundle.putString(Utils.VOTE_AVERAGE,movie.getVote_average());
-
-        PosterDetailFragment posterDetailFragment = new PosterDetailFragment();
-        posterDetailFragment.setArguments(bundle);
-
+        MovieParceable movieParceable = new MovieParceable(movie);
         Intent intent = new Intent(this, PosterActivity.class);
-//        String message = editText.getText().toString();
-        intent.putExtra(Utils.TITLE,movie.getTitle());
-        intent.putExtra(Utils.BACKDROP,movie.getBackdropPath());
-        intent.putExtra(Utils.POSTER_IMAGE,movie.getPosterPath());
-        intent.putExtra(Utils.OVERVIEW,movie.getOverView());
-        intent.putExtra(Utils.RELEASE_DATE,movie.getReleaseDate());
-        intent.putExtra(Utils.VOTE_AVERAGE,movie.getVote_average());
+        intent.putExtra("myData", movieParceable);
         startActivity(intent);
     }
 }
