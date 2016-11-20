@@ -12,16 +12,13 @@ import java.util.GregorianCalendar;
  */
 
 public class Utils {
-    public static final String VOTE_AVERAGE = "average";
-    public static final String TITLE = "title";
-    public static final String RELEASE_DATE = "releaseDate";
-    public static final String POSTER_IMAGE = "posterImage";
-    public static final String BACKDROP = "backDrop";
-    public static final String OVERVIEW = "overview";
+
     public static final String IMDB_URL_RATED = "http://api.themoviedb.org/3/movie/top_rated?";
+    public static final String IMDB_BASE_URL = "http://api.themoviedb.org/3/movie/";
     public static final String IMDB_URL_POPULAR = "http://api.themoviedb.org/3/movie/popular?";
+    public static final String IMDB_URL_TRAILERS = "http://api.themoviedb.org/3/movie/";
     public static final String API_KEY = "api_key";
-    private static final String URL_IMAGE = "http://image.tmdb.org/t/p/";
+    public static final String YOUTUBE_API_KEY = "AIzaSyCI5oGITijn98MLQuUectcSPtZ0pEwbEfs";
 
 
     public static String formatDate(String dateValue)
