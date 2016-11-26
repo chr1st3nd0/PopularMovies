@@ -5,69 +5,96 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="beme.ingram.com.popularmovies.fragments.PosterDetailFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/top_content"
+        android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/movie_image"
         android:layout_width="150dp"
         android:layout_margin="4dp"
         android:layout_height="200dp"
         tools:src="@mipmap/ic_launcher"/>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:layout_margin="4dp"
+    android:layout_toRightOf="@id/movie_image">
 
     <TextView
         android:text="Movie Title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_margin="4dp"
         android:textSize="25dp"
         android:textStyle="bold"
-        android:layout_toRightOf="@id/movie_image"
         android:id="@+id/movie_title"/>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_below="@id/movie_title"
-        android:id="@+id/rating_container"
-        android:layout_toRightOf="@+id/movie_image">
+        android:id="@+id/rating_container">
 
     <ImageView
         android:layout_width="125dp"
         app:srcCompat="@drawable/ic_grade_black_48px"
-        android:id="@+id/imageView"
+        android:layout_centerHorizontal="true"
         android:layout_height="125dp"
         android:tint="#FFD700" />
 
         <TextView
             android:text="10"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/vote_average"
             android:gravity="center"
             android:textStyle="bold"
             android:textColor="#ffffff"
             android:layout_centerInParent="true"/>
+
     </RelativeLayout>
-
-
     <TextView
         android:text="TextView"
-        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_below="@+id/rating_container"
-        android:layout_toRightOf="@id/movie_image"
         android:id="@+id/release_date" />
+</RelativeLayout>
+
+
+    </RelativeLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/top_content"
+        android:background="#000000"/>
 
 
     <TextView
         android:text="TextView"
         android:layout_width="379dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:id="@+id/synopsis"
-        android:layout_below="@id/movie_image"
+        android:layout_below="@id/top_content"
         android:layout_centerHorizontal="true"/>
+
+    <FrameLayout
+        android:id="@+id/trailer_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/trailer_recycler"
+        android:layout_marginTop="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/synopsis"/>

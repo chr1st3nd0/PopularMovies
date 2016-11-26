@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements PoserAdapter.Show
 
     @Override
     public void showDetails(Movie movie) {
-
         MovieParceable movieParceable = new MovieParceable(movie);
         Intent intent = new Intent(this, PosterActivity.class);
         intent.putExtra("myData", movieParceable);

@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 import beme.ingram.com.popularmovies.R;
 import beme.ingram.com.popularmovies.Utils;
-import beme.ingram.com.popularmovies.models.Movie;
 import beme.ingram.com.popularmovies.models.Trailer;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,9 +87,15 @@ public class YoutubeAdapter extends RecyclerView.Adapter<YoutubeAdapter.ViewHold
             }
         });
 
-        // Set the scale type for ImageView image scaling
-      //  holder.youTubePlayerView.setId(Integer.parseInt(mTrailers.get(position).getId()));
-      //  holder.youTubePlayerView.initialize(Utils.YOUTUBE_API_KEY, (YouTubePlayer.OnInitializedListener) mContext);
+        holder.youTubeThumbnailView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShowTrailer showTrailer = (ShowTrailer)mContext;
+                showTrailer.showTrailers(mTrailers.get(position).getKey());
+
+            }
+        });
+
     }
 
 
@@ -101,8 +106,8 @@ public class YoutubeAdapter extends RecyclerView.Adapter<YoutubeAdapter.ViewHold
         return mTrailers.size();
     }
 
-    public interface ShowDetails
+    public interface ShowTrailer
     {
-        void showDetails(Movie movie);
+        void showTrailers(String videoID);
     }
 }

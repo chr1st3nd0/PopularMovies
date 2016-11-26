@@ -1,5 +1,6 @@
 package beme.ingram.com.popularmovies;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -10,12 +11,15 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
+import beme.ingram.com.popularmovies.adapters.YoutubeAdapter;
 import beme.ingram.com.popularmovies.fragments.PosterDetailFragment;
 import beme.ingram.com.popularmovies.models.MovieParceable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PosterActivity extends AppCompatActivity {
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
+
+public class PosterActivity extends AppCompatActivity implements YoutubeAdapter.ShowTrailer {
 
     String backDropPath;
     @BindView(R.id.backdrop)
@@ -45,6 +49,8 @@ public class PosterActivity extends AppCompatActivity {
         posterDetailFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().add(R.id.poster_fragment,posterDetailFragment,null).commit();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
     }
 
     private void afterRenderedBackdrop(final View view)
@@ -62,13 +68,17 @@ public class PosterActivity extends AppCompatActivity {
         });
     }
 
-
-
     private void getBackdrop()
     {
         Glide.with(this).load("http://image.tmdb.org/t/p/w500/" + backDropPath).into(backDrop);
     }
 
 
+    @Override
+    public void showTrailers(String videoID) {
 
+        Intent intent = new Intent(this, TrailerActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, videoID);
+        startActivity(intent);
+    }
 }

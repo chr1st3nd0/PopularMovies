@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import beme.ingram.com.popularmovies.DividerItemDecoration;
 import beme.ingram.com.popularmovies.R;
 import beme.ingram.com.popularmovies.Utils;
 import beme.ingram.com.popularmovies.adapters.YoutubeAdapter;
@@ -77,8 +78,10 @@ public class PosterDetailFragment extends Fragment {
         synopsis.setText(movieParceable.getOverview());
         voteAverage.setText(movieParceable.getVote_average());
 
+
         trailerRecycler.setHasFixedSize(true);
         trailerRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        trailerRecycler.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL_LIST));
 
         afterRenderedPoster(movieImage);
 

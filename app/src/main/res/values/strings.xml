@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Popular Movies</string>
     <string name="action_settings">Settings</string>
-    <string name="api_key">7520b6c8fbbdf7a6fc3c7686b13e6941</string>
+    <string name="api_key"></string>
     <string name="poster_width">w185</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -10,4 +10,10 @@
     <string name="popular_rated_label">Popular</string>
     <string name="array_name">results</string>
     <string name="released_label">Released:</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_trailer">TrailerActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
 </resources>
