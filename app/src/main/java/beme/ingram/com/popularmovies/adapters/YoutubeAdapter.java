@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeThumbnailLoader;
@@ -28,6 +29,8 @@ public class YoutubeAdapter extends RecyclerView.Adapter<YoutubeAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         @BindView(R.id.youtube_thumbnail) YouTubeThumbnailView youTubeThumbnailView;
+        @BindView(R.id.trailer_name)
+        TextView trailerName;
 
         public ViewHolder(View v) {
             super(v);
@@ -72,6 +75,8 @@ public class YoutubeAdapter extends RecyclerView.Adapter<YoutubeAdapter.ViewHold
              //   holder.relativeLayoutOverYouTubeThumbnailView.setVisibility(View.VISIBLE);
             }
         };
+
+        holder.trailerName.setText(mTrailers.get(position).getName());
 
         holder.youTubeThumbnailView.initialize(Utils.YOUTUBE_API_KEY, new YouTubeThumbnailView.OnInitializedListener() {
             @Override
