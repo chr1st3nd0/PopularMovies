@@ -1,10 +1,13 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="beme.ingram.com.popularmovies.fragments.PosterDetailFragment">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/top_content"
@@ -92,10 +95,24 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
 
+        <TextView
+            android:id="@+id/text_trailer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trailers"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_margin="8dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/synopsis"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/trailer_recycler"
         android:layout_marginTop="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/synopsis"/>
-</RelativeLayout>
+        android:layout_below="@id/text_trailer"/>
+
+    </RelativeLayout>
+
+</ScrollView>

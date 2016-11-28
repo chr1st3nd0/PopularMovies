@@ -9,9 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,7 +16,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,9 +26,9 @@ import java.util.ArrayList;
 import beme.ingram.com.popularmovies.DividerItemDecoration;
 import beme.ingram.com.popularmovies.R;
 import beme.ingram.com.popularmovies.Utils;
-import beme.ingram.com.popularmovies.adapters.YoutubeAdapter;
+import beme.ingram.com.popularmovies.adapters.ReviewsAdapter;
 import beme.ingram.com.popularmovies.models.MovieParceable;
-import beme.ingram.com.popularmovies.models.Trailer;
+import beme.ingram.com.popularmovies.models.Review;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -41,21 +37,15 @@ import static beme.ingram.com.popularmovies.R.string.api_key;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PosterDetailFragment extends Fragment {
+public class ReviewFragment extends Fragment {
 
     View rootView;
-    @BindView(R.id.movie_image)ImageView movieImage;
-    @BindView(R.id.release_date)TextView releaseDate;
-    @BindView(R.id.synopsis)TextView synopsis;
-    @BindView(R.id.vote_average)TextView voteAverage;
-    @BindView(R.id.movie_title)TextView movieTitle;
-    @BindView(R.id.trailer_recycler)RecyclerView trailerRecycler;
-    YoutubeAdapter youtubeAdapter;
-    ArrayList<Trailer> trailers;
+    ArrayList<Review> reviews;
+    ReviewsAdapter reviewsAdapter;
+    @BindView(R.id.review_recycler
+    ) RecyclerView reviewsRecycler;
 
-    String posterPath;
-
-    public PosterDetailFragment() {
+    public ReviewFragment() {
         // Required empty public constructor
     }
 
@@ -64,44 +54,22 @@ public class PosterDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        rootView = inflater.inflate(R.layout.fragment_poster_detail, container, false);
+        rootView = inflater.inflate(R.layout.fragment_review, container, false);
+
         ButterKnife.bind(this,rootView);
+        reviews = new ArrayList();
+
 
         Bundle bundle = this.getArguments();
-        trailers = new ArrayList<>();
-
         MovieParceable movieParceable = bundle.getParcelable("myData");
 
-        posterPath = movieParceable.getPoster_path();
-        movieTitle.setText(movieParceable.getTitle());
-        releaseDate.setText( getActivity().getResources().getString(R.string.released_label)+ " " + Utils.formatDate(movieParceable.getRelease_date()));
-        synopsis.setText(movieParceable.getOverview());
-        voteAverage.setText(movieParceable.getVote_average());
+        reviewsRecycler.setHasFixedSize(true);
+        reviewsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        reviewsRecycler.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL_LIST));
 
-
-        trailerRecycler.setHasFixedSize(true);
-        trailerRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        trailerRecycler.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL_LIST));
-
-        afterRenderedPoster(movieImage);
 
         runVolley(movieParceable.getId());
-
         return rootView;
-    }
-
-    private void afterRenderedPoster(final View view)
-    {
-        ViewTreeObserver vto = view.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-
-                getPoster(view);
-                ViewTreeObserver obs = view.getViewTreeObserver();
-                obs.removeGlobalOnLayoutListener(this);
-            }
-        });
     }
 
 
@@ -109,7 +77,7 @@ public class PosterDetailFragment extends Fragment {
     {
         String apiKey = getActivity().getResources().getString(api_key);
 
-        Uri builtUri = Uri.parse(Utils.IMDB_BASE_URL  + id + "/videos").buildUpon()
+        Uri builtUri = Uri.parse(Utils.IMDB_BASE_URL  + id + "/reviews").buildUpon()
                 .appendQueryParameter(Utils.API_KEY,apiKey).build();
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -125,10 +93,10 @@ public class PosterDetailFragment extends Fragment {
                             for(int i=0; i<length; i++)
                             {
                                 JSONObject jObj = ja_data.getJSONObject(i);
-                                trailers.add(new Trailer(jObj));
+                                reviews.add(new Review(jObj));
                             }
-                            youtubeAdapter = new YoutubeAdapter(getActivity(),trailers);
-                            trailerRecycler.setAdapter(youtubeAdapter);
+                            reviewsAdapter = new ReviewsAdapter(reviews);
+                            reviewsRecycler.setAdapter(reviewsAdapter);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -152,10 +120,5 @@ public class PosterDetailFragment extends Fragment {
 
     }
 
-
-    private void getPoster(View view)
-    {
-        Glide.with(this).load(posterPath).into((ImageView) view);
-    }
 
 }
