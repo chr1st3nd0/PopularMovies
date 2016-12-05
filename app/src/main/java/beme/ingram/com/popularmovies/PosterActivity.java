@@ -110,7 +110,6 @@ public class PosterActivity extends AppCompatActivity implements YoutubeAdapter.
 
     @Override
     public void showTrailers(String videoID) {
-
         Intent intent = new Intent(this, TrailerActivity.class);
         intent.putExtra(EXTRA_MESSAGE, videoID);
         startActivity(intent);

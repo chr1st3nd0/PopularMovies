@@ -28,11 +28,8 @@ public class TrailerActivity extends YouTubeBaseActivity implements YouTubePlaye
         Intent intent = getIntent();
         videoID = intent.getStringExtra(EXTRA_MESSAGE);
 
-
         ButterKnife.bind(this);
         youTubePlayerView.initialize(Utils.YOUTUBE_API_KEY,this);
-
-
 
     }
 

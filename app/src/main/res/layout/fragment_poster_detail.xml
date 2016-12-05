@@ -8,6 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/top_content"
@@ -41,6 +42,14 @@
         android:gravity="center"
         android:layout_below="@id/movie_title"
         android:id="@+id/rating_container">
+
+        <ImageView
+            android:id="@+id/fav_heart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:tint="#FFEE58"
+            app:srcCompat="@drawable/ic_favorite_border_white_24px"/>
 
     <ImageView
         android:layout_width="125dp"

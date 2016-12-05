@@ -90,9 +90,6 @@ public class MoviePostersPopularFragment extends Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
-
-
                     }
                 }, new Response.ErrorListener() {
 

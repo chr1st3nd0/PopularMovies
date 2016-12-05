@@ -26,6 +26,8 @@ public class Movie {
 
 
 
+    public Movie(){}
+
 
     public Movie(JSONObject jsonObject, Context context) {
 
@@ -47,14 +49,15 @@ public class Movie {
 
     }
 
-    String posterPath;
-    String backdropPath;
-    String overView;
-    String adult;
-    String releaseDate;
-    String title;
-    String vote_average;
-    String id;
+    private String posterPath;
+    private String backdropPath;
+    private String overView;
+    private String adult;
+    private String releaseDate;
+    private String title;
+    private String vote_average;
+    private String id;
+    private byte[] buffer;
 
     public String getTitle() {
         return title;
@@ -118,5 +121,13 @@ public class Movie {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public byte[] getBuffer() {
+        return buffer;
+    }
+
+    public void setBuffer(byte[] buffer) {
+        this.buffer = buffer;
     }
 }
