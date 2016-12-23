@@ -18,6 +18,7 @@ import beme.ingram.com.popularmovies.adapters.YoutubeAdapter;
 import beme.ingram.com.popularmovies.fragments.PosterDetailFragment;
 import beme.ingram.com.popularmovies.fragments.ReviewFragment;
 import beme.ingram.com.popularmovies.models.MovieParceable;
+import beme.ingram.com.popularmovies.offline.OfflineMovieParceable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -33,6 +34,7 @@ public class PosterActivity extends AppCompatActivity implements YoutubeAdapter.
     @BindView(R.id.viewpager_create)ViewPager viewPager;
     PosterDetailFragment posterDetailFragment;
     ReviewFragment reviewFragment;
+    boolean offline = false;
 
 
     @Override
@@ -43,27 +45,40 @@ public class PosterActivity extends AppCompatActivity implements YoutubeAdapter.
         setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
-        MovieParceable movieParceable = getIntent().getParcelableExtra("myData");
-        getSupportActionBar().setTitle(movieParceable.getTitle());
+        Bundle bundle = getIntent().getExtras();
 
-        backDropPath = movieParceable.getBackdrop_path();
 
-        afterRenderedBackdrop(backDrop);
+
+        if(bundle.getParcelable("myData") instanceof OfflineMovieParceable)
+        {
+            OfflineMovieParceable movieParceable = bundle.getParcelable("myData");
+            getSupportActionBar().setTitle(movieParceable.getTitle());
+            bundle.putParcelable("myData",movieParceable);
+            offline = true;
+        }
+        else
+        {
+            MovieParceable movieParceable = bundle.getParcelable("myData");
+            getSupportActionBar().setTitle(movieParceable.getTitle());
+            backDropPath = movieParceable.getBackdrop_path();
+            bundle.putParcelable("myData",movieParceable);
+            afterRenderedBackdrop(backDrop);
+
+            offline = false;
+            reviewFragment = new ReviewFragment();
+
+            reviewFragment.setArguments(bundle);
+        }
 
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.transparent));
 
 
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("myData",movieParceable);
+            posterDetailFragment = new PosterDetailFragment();
+            posterDetailFragment.setArguments(bundle);
 
-        posterDetailFragment = new PosterDetailFragment();
-        posterDetailFragment.setArguments(bundle);
 
-        reviewFragment = new ReviewFragment();
 
-        reviewFragment.setArguments(bundle);
 
-      //  getSupportFragmentManager().beginTransaction().add(R.id.poster_fragment,posterDetailFragment,null).commit();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager_create);
@@ -84,7 +99,9 @@ public class PosterActivity extends AppCompatActivity implements YoutubeAdapter.
     private void setupViewPager(ViewPager viewPager) {
         TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
         adapter.addFragment(posterDetailFragment,"About");
-        adapter.addFragment(reviewFragment,"Reviews");
+        if(!offline) {
+            adapter.addFragment(reviewFragment, "Reviews");
+        }
         viewPager.setAdapter(adapter);
     }
     private void afterRenderedBackdrop(final View view)

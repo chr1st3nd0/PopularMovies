@@ -15,6 +15,8 @@ import beme.ingram.com.popularmovies.fragments.MoviePostersPopularFragment;
 import beme.ingram.com.popularmovies.fragments.MoviePostersRatedFragment;
 import beme.ingram.com.popularmovies.models.Movie;
 import beme.ingram.com.popularmovies.models.MovieParceable;
+import beme.ingram.com.popularmovies.offline.OfflineMovie;
+import beme.ingram.com.popularmovies.offline.OfflineMovieParceable;
 
 public class MainActivity extends AppCompatActivity implements PoserAdapter.ShowDetails,FavoritesAdapter.ShowFavoriteDetails {
 
@@ -54,19 +56,23 @@ public class MainActivity extends AppCompatActivity implements PoserAdapter.Show
     }
 
 
+
     @Override
     public void showDetails(Movie movie) {
         MovieParceable movieParceable = new MovieParceable(movie);
         Intent intent = new Intent(this, PosterActivity.class);
         intent.putExtra("myData", movieParceable);
+        intent.putExtra("offline", false);
         startActivity(intent);
     }
 
     @Override
-    public void showFavoriteDetails(Movie movie) {
-        MovieParceable movieParceable = new MovieParceable(movie);
+    public void showFavoriteDetails(OfflineMovie movie) {
+        OfflineMovieParceable movieParceable = new OfflineMovieParceable(movie);
         Intent intent = new Intent(this, PosterActivity.class);
-        intent.putExtra("myData", movieParceable);
+        Bundle extras = new Bundle();
+        extras.putParcelable("myData", movieParceable);
+        intent.putExtras(extras);
         startActivity(intent);
     }
 }

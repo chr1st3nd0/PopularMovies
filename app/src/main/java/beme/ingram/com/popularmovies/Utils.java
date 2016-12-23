@@ -22,7 +22,7 @@ public class Utils {
     public static final String IMDB_URL_POPULAR = "http://api.themoviedb.org/3/movie/popular?";
     public static final String API_KEY = "api_key";
     public static final String TEST_URL = "http://api.themoviedb.org/3/movie/259316/reviews?api_key=7520b6c8fbbdf7a6fc3c7686b13e6941";
-    public static final String YOUTUBE_API_KEY = "";
+    public static final String YOUTUBE_API_KEY = "AIzaSyCI5oGITijn98MLQuUectcSPtZ0pEwbEfs";
 
 
     public static String formatDate(String dateValue)

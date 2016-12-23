@@ -1,4 +1,4 @@
-package beme.ingram.com.popularmovies.models;
+package beme.ingram.com.popularmovies.offline;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,7 +12,7 @@ import beme.ingram.com.popularmovies.R;
  * Created by chr1s_000 on 10/19/2016.
  */
 
-public class Movie {
+public class OfflineMovie {
 
     private static final String POSTER_PATH = "poster_path";
     private static final String BACKDROP_PATH = "backdrop_path";
@@ -26,10 +26,10 @@ public class Movie {
 
 
 
-    public Movie(){}
+    public OfflineMovie(){}
 
 
-    public Movie(JSONObject jsonObject, Context context) {
+    public OfflineMovie(JSONObject jsonObject, Context context) {
 
         String imageWidth = context.getResources().getString(R.string.poster_width);
         try {

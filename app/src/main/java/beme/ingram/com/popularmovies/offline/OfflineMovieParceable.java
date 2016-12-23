@@ -1,4 +1,4 @@
-package beme.ingram.com.popularmovies.models;
+package beme.ingram.com.popularmovies.offline;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by chr1s_000 on 11/6/2016.
  */
 
-public class MovieParceable implements Parcelable {
+public class OfflineMovieParceable implements Parcelable {
 
     private String poster_path;
     private String backdrop_path;
@@ -17,8 +17,9 @@ public class MovieParceable implements Parcelable {
     private String title;
     private String vote_average;
     private  String id;
+    private byte[] buffer;
 
-    protected MovieParceable(Parcel in) {
+    protected OfflineMovieParceable(Parcel in) {
         poster_path = in.readString() ;
         overview = in.readString();
         backdrop_path = in.readString();
@@ -27,9 +28,11 @@ public class MovieParceable implements Parcelable {
         title = in.readString();
         vote_average = in.readString();
         id = in.readString();
+        buffer = new byte[in.readInt()];
+        in.readByteArray(buffer);
     }
 
-    public MovieParceable(Movie  movie) {
+    public OfflineMovieParceable(OfflineMovie movie) {
         // Normal actions performed by class, since this is still a normal object!
         poster_path = movie.getPosterPath();
         overview = movie.getOverView();
@@ -39,18 +42,19 @@ public class MovieParceable implements Parcelable {
         title = movie.getTitle();
         vote_average = movie.getVote_average();
         id = movie.getId();
+        buffer = movie.getBuffer();
     }
 
-    public static final Creator<MovieParceable> CREATOR = new Creator<MovieParceable>() {
+    public static final Creator<OfflineMovieParceable> CREATOR = new Creator<OfflineMovieParceable>() {
         @Override
-        public MovieParceable createFromParcel(Parcel in) {
+        public OfflineMovieParceable createFromParcel(Parcel in) {
 
-            return new MovieParceable(in);
+            return new OfflineMovieParceable(in);
         }
 
         @Override
-        public MovieParceable[] newArray(int size) {
-            return new MovieParceable[size];
+        public OfflineMovieParceable[] newArray(int size) {
+            return new OfflineMovieParceable[size];
         }
     };
 
@@ -69,6 +73,8 @@ public class MovieParceable implements Parcelable {
         out.writeString(title);
         out.writeString(vote_average);
         out.writeString(id);
+        out.writeInt(buffer.length);
+        out.writeByteArray(buffer);
     }
 
     public String getPoster_path() {
@@ -103,4 +109,7 @@ public class MovieParceable implements Parcelable {
         return id;
     }
 
+    public byte[] getBuffer() {
+        return buffer;
+    }
 }

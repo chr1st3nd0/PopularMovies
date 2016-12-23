@@ -15,12 +15,12 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 
 import beme.ingram.com.popularmovies.R;
-import beme.ingram.com.popularmovies.models.Movie;
+import beme.ingram.com.popularmovies.offline.OfflineMovie;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder> {
-    private ArrayList<Movie> mMovies;
+    private ArrayList<OfflineMovie> mMovies;
     private Context mContext;
 
     // Provide a reference to the views for each data item
@@ -37,7 +37,7 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public FavoritesAdapter(Context context, ArrayList<Movie> movies) {
+    public FavoritesAdapter(Context context, ArrayList<OfflineMovie> movies) {
         mMovies = movies;
         mContext = context;
     }
@@ -81,8 +81,8 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
         byte[] blob = mMovies.get(position).getBuffer();
         // Convert the byte array to Bitmap
         Bitmap bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.length);
-
-        holder.posterImage.setImageBitmap(bitmap);
+        
+        holder.posterImage.setImageBitmap(Bitmap.createScaledBitmap(bitmap, 120, 300, false));
 
         holder.posterImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +102,6 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
 
     public interface ShowFavoriteDetails
     {
-        void showFavoriteDetails(Movie movie);
+        void showFavoriteDetails(OfflineMovie movie);
     }
 }

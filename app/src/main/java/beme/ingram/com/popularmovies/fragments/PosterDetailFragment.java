@@ -3,9 +3,13 @@ package beme.ingram.com.popularmovies.fragments;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -35,6 +39,7 @@ import beme.ingram.com.popularmovies.Utils;
 import beme.ingram.com.popularmovies.adapters.YoutubeAdapter;
 import beme.ingram.com.popularmovies.models.MovieParceable;
 import beme.ingram.com.popularmovies.models.Trailer;
+import beme.ingram.com.popularmovies.offline.OfflineMovieParceable;
 import beme.ingram.com.popularmovies.sql.FeedReaderContract;
 import beme.ingram.com.popularmovies.sql.FeedReaderDbHelper;
 import butterknife.BindView;
@@ -61,13 +66,16 @@ public class PosterDetailFragment extends Fragment {
     TextView movieTitle;
     @BindView(R.id.trailer_recycler)
     RecyclerView trailerRecycler;
-    @BindView(R.id.fav_heart)
-    ImageView favHeart;
+    @BindView(R.id.fav_heart) ImageView favHeart;
+    @BindView(R.id.text_trailer) TextView trailerHeader;
+    @BindView(R.id.the_nested_scroll)NestedScrollView nestedScrollView;
     YoutubeAdapter youtubeAdapter;
     ArrayList<Trailer> trailers;
 
     FeedReaderDbHelper feedReaderDbHelper;
     String posterPath;
+
+    boolean isLikedAready = false;
 
     public PosterDetailFragment() {
         // Required empty public constructor
@@ -81,37 +89,67 @@ public class PosterDetailFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_poster_detail, container, false);
         ButterKnife.bind(this, rootView);
 
+
         Bundle bundle = this.getArguments();
-        trailers = new ArrayList<>();
-
-        final MovieParceable movieParceable = bundle.getParcelable("myData");
-
-        posterPath = movieParceable.getPoster_path();
-        movieTitle.setText(movieParceable.getTitle());
-        releaseDate.setText(getActivity().getResources().getString(R.string.released_label) + " " + Utils.formatDate(movieParceable.getRelease_date()));
-        synopsis.setText(movieParceable.getOverview());
-        voteAverage.setText(movieParceable.getVote_average());
 
 
-        trailerRecycler.setHasFixedSize(true);
-        trailerRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        trailerRecycler.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        if(bundle.getParcelable("myData") instanceof OfflineMovieParceable)
+        {
+            final OfflineMovieParceable movieParceable = bundle.getParcelable("myData");
 
-        feedReaderDbHelper = new FeedReaderDbHelper(getActivity());
+            trailerHeader.setVisibility(View.GONE);
+            trailerRecycler.setVisibility(View.GONE);
+
+            byte[] blob = movieParceable.getBuffer();
+            // Convert the byte array to Bitmap
+            Bitmap bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.length);
+
+            movieImage.setImageBitmap(Bitmap.createScaledBitmap(bitmap, 120, 300, false));
 
 
-        favHeart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        }
+        else
+        {
+            final MovieParceable movieParceable = bundle.getParcelable("myData");
 
-                makeFavorite(movieParceable);
+            posterPath = movieParceable.getPoster_path();
+            movieTitle.setText(movieParceable.getTitle());
+            synopsis.setText(movieParceable.getOverview());
+            voteAverage.setText(movieParceable.getVote_average());
+            releaseDate.setText(getActivity().getResources().getString(R.string.released_label) + " " + Utils.formatDate(movieParceable.getRelease_date()));
 
-            }
-        });
+            trailers = new ArrayList<>();
+            trailerRecycler.setHasFixedSize(true);
+            trailerRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+            trailerRecycler.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
-        afterRenderedPoster(movieImage);
+            afterRenderedPoster(movieImage);
+            feedReaderDbHelper = new FeedReaderDbHelper(getActivity());
 
-        runVolley(movieParceable.getId());
+            favHeart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if(isLikedAready) {
+                        isLikedAready = false;
+                        removeFavorite(movieParceable);
+
+                    }
+                    else
+                    {
+                        isLikedAready = true;
+                        Snackbar snackbar = Snackbar
+                                .make(nestedScrollView, movieParceable.getTitle() + " Added to Favorites", Snackbar.LENGTH_LONG);
+
+                        snackbar.show();
+                        makeFavorite(movieParceable);
+                    }
+                }
+            });
+
+            runVolley(movieParceable.getId());
+
+        }
 
         return rootView;
     }
@@ -124,10 +162,25 @@ public class PosterDetailFragment extends Fragment {
         values.put(FeedReaderContract.FeedEntry.ENTRY_TITLE, movieParceable.getTitle());
         values.put(FeedReaderContract.FeedEntry.ENTRY_RATING, movieParceable.getVote_average());
         values.put(FeedReaderContract.FeedEntry.ENTRY_SYNOPSIS, movieParceable.getOverview());
+        values.put(FeedReaderContract.FeedEntry.ENTRY_SYNOPSIS, movieParceable.getOverview());
+        values.put(FeedReaderContract.FeedEntry.ENTRY_DATE, movieParceable.getRelease_date());
         values.put(FeedReaderContract.FeedEntry.ENTRY_POSTER, getImageBuffer(movieImage));
         db.insert(FeedReaderContract.FeedEntry.TABLE_NAME, null, values);
-
     }
+
+    private void removeFavorite(MovieParceable movieParceable) {
+
+        SQLiteDatabase db = feedReaderDbHelper.getWritableDatabase();
+
+        // Define 'where' part of query.
+        String selection = FeedReaderContract.FeedEntry.ENTRY_TITLE + " LIKE ?";
+// Specify arguments in placeholder order.
+        String[] selectionArgs = { movieParceable.getTitle() };
+// Issue SQL statement.
+        db.delete(FeedReaderContract.FeedEntry.TABLE_NAME, selection, selectionArgs);
+    }
+
+
 
 
 

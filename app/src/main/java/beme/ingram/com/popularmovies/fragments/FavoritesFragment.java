@@ -11,11 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import beme.ingram.com.popularmovies.R;
 import beme.ingram.com.popularmovies.adapters.FavoritesAdapter;
-import beme.ingram.com.popularmovies.models.Movie;
+import beme.ingram.com.popularmovies.offline.OfflineMovie;
 import beme.ingram.com.popularmovies.sql.FeedReaderContract;
 import beme.ingram.com.popularmovies.sql.FeedReaderDbHelper;
 import butterknife.BindView;
@@ -26,7 +25,7 @@ import butterknife.ButterKnife;
  */
 public class FavoritesFragment extends Fragment {
 
-    ArrayList<Movie> movies;
+    ArrayList<OfflineMovie> movies;
 
     View rootView;
     @BindView(R.id.favorites_recycler)RecyclerView favoriteRecycler;
@@ -46,8 +45,6 @@ public class FavoritesFragment extends Fragment {
 
         movies = new ArrayList<>();
 
-
-
         getFavorites();
         favoriteRecycler.setLayoutManager(new GridLayoutManager(getActivity(),2));
         favoriteRecycler.setHasFixedSize(true);
@@ -57,9 +54,6 @@ public class FavoritesFragment extends Fragment {
 
 
     private void getFavorites() {
-
-        List<Movie> array = new ArrayList();
-
         feedReaderDbHelper = new FeedReaderDbHelper(getActivity());
         SQLiteDatabase db = feedReaderDbHelper.getReadableDatabase();
 
@@ -68,10 +62,11 @@ public class FavoritesFragment extends Fragment {
         if (cursor.moveToFirst()) {
             while (cursor.isAfterLast() == false) {
 
-                Movie tempMovie = new Movie();
+                OfflineMovie tempMovie = new OfflineMovie();
                 tempMovie.setTitle(cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.ENTRY_TITLE)));
                 tempMovie.setOverView(cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.ENTRY_SYNOPSIS)));
                 tempMovie.setVote_average(cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.ENTRY_RATING)));
+                tempMovie.setReleaseDate(cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.ENTRY_DATE)));
                 tempMovie.setBuffer(cursor.getBlob(cursor.getColumnIndex(FeedReaderContract.FeedEntry.ENTRY_POSTER)));
                 movies.add(tempMovie);
                 cursor.moveToNext();
