@@ -70,10 +70,10 @@ public class PoserAdapter extends RecyclerView.Adapter<PoserAdapter.ViewHolder> 
 
 
         // Apply the new height for ImageView programmatically
-        holder.posterImage.getLayoutParams().height = height;
-
-        // Apply the new width for ImageView programmatically
-        holder.posterImage.getLayoutParams().width = width;
+//        holder.posterImage.getLayoutParams().height = height;
+//
+//        // Apply the new width for ImageView programmatically
+//        holder.posterImage.getLayoutParams().width = width;
 
         // Set the scale type for ImageView image scaling
         holder.posterImage.setScaleType(ImageView.ScaleType.FIT_XY);

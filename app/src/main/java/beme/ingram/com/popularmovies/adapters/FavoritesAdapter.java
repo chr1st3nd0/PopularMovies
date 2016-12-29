@@ -69,11 +69,11 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
         holder.posterImage.requestLayout();
 
 
-        // Apply the new height for ImageView programmatically
-        holder.posterImage.getLayoutParams().height = height;
-
-        // Apply the new width for ImageView programmatically
-        holder.posterImage.getLayoutParams().width = width;
+//        // Apply the new height for ImageView programmatically
+//        holder.posterImage.getLayoutParams().height = height;
+//
+//        // Apply the new width for ImageView programmatically
+//        holder.posterImage.getLayoutParams().width = width;
 
         // Set the scale type for ImageView image scaling
         holder.posterImage.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -82,7 +82,7 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
         // Convert the byte array to Bitmap
         Bitmap bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.length);
         
-        holder.posterImage.setImageBitmap(Bitmap.createScaledBitmap(bitmap, 120, 300, false));
+        holder.posterImage.setImageBitmap(bitmap);
 
         holder.posterImage.setOnClickListener(new View.OnClickListener() {
             @Override

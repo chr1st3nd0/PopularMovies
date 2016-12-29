@@ -104,7 +104,12 @@ public class PosterDetailFragment extends Fragment {
             // Convert the byte array to Bitmap
             Bitmap bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.length);
 
-            movieImage.setImageBitmap(Bitmap.createScaledBitmap(bitmap, 120, 300, false));
+            movieImage.setImageBitmap(Bitmap.createScaledBitmap(bitmap, 300, 400, false));
+
+            movieTitle.setText(movieParceable.getTitle());
+            synopsis.setText(movieParceable.getOverview());
+            voteAverage.setText(movieParceable.getVote_average());
+            releaseDate.setText(getActivity().getResources().getString(R.string.released_label) + " " + Utils.formatDate(movieParceable.getRelease_date()));
 
 
         }
