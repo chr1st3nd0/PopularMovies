@@ -2,6 +2,7 @@ package beme.ingram.com.popularmovies;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -24,7 +25,7 @@ import butterknife.ButterKnife;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
-public class PosterActivity extends AppCompatActivity implements YoutubeAdapter.ShowTrailer {
+public class PosterActivity extends AppCompatActivity implements YoutubeAdapter.ShowTrailer, PosterDetailFragment.SetCollapsableInterface {
 
     String backDropPath;
     @BindView(R.id.backdrop)
@@ -32,6 +33,7 @@ public class PosterActivity extends AppCompatActivity implements YoutubeAdapter.
     @BindView(R.id.collapsing_toolbar)CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.tab_layout)TabLayout tabLayout;
     @BindView(R.id.viewpager_create)ViewPager viewPager;
+    @BindView(R.id.the_app_bar)AppBarLayout appBarLayout;
     PosterDetailFragment posterDetailFragment;
     ReviewFragment reviewFragment;
     boolean offline = false;
@@ -130,5 +132,11 @@ public class PosterActivity extends AppCompatActivity implements YoutubeAdapter.
         Intent intent = new Intent(this, TrailerActivity.class);
         intent.putExtra(EXTRA_MESSAGE, videoID);
         startActivity(intent);
+    }
+
+    @Override
+    public void setCollapse(boolean value) {
+
+        appBarLayout.setExpanded(value);
     }
 }

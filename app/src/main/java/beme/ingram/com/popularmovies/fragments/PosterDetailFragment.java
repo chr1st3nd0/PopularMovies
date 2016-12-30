@@ -2,6 +2,7 @@ package beme.ingram.com.popularmovies.fragments;
 
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -74,6 +75,7 @@ public class PosterDetailFragment extends Fragment {
 
     FeedReaderDbHelper feedReaderDbHelper;
     String posterPath;
+    SQLiteDatabase db;
 
     boolean isLikedAready = false;
 
@@ -91,11 +93,16 @@ public class PosterDetailFragment extends Fragment {
 
 
         Bundle bundle = this.getArguments();
+        feedReaderDbHelper = new FeedReaderDbHelper(getActivity());
+        db = feedReaderDbHelper.getWritableDatabase();
+
+        SetCollapsableInterface setCollapsableInterface = (SetCollapsableInterface) getActivity();
 
 
         if(bundle.getParcelable("myData") instanceof OfflineMovieParceable)
         {
             final OfflineMovieParceable movieParceable = bundle.getParcelable("myData");
+            setCollapsableInterface.setCollapse(false);
 
             trailerHeader.setVisibility(View.GONE);
             trailerRecycler.setVisibility(View.GONE);
@@ -116,6 +123,7 @@ public class PosterDetailFragment extends Fragment {
         else
         {
             final MovieParceable movieParceable = bundle.getParcelable("myData");
+            setCollapsableInterface.setCollapse(true);
 
             posterPath = movieParceable.getPoster_path();
             movieTitle.setText(movieParceable.getTitle());
@@ -129,24 +137,17 @@ public class PosterDetailFragment extends Fragment {
             trailerRecycler.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
             afterRenderedPoster(movieImage);
-            feedReaderDbHelper = new FeedReaderDbHelper(getActivity());
 
             favHeart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    if(isLikedAready) {
-                        isLikedAready = false;
+                    if(CheckIsDataAlreadyInDBorNot(FeedReaderContract.FeedEntry.TABLE_NAME, FeedReaderContract.FeedEntry.ENTRY_TITLE,movieParceable.getTitle()))
+                    {
                         removeFavorite(movieParceable);
-
                     }
                     else
                     {
-                        isLikedAready = true;
-                        Snackbar snackbar = Snackbar
-                                .make(nestedScrollView, movieParceable.getTitle() + " Added to Favorites", Snackbar.LENGTH_LONG);
-
-                        snackbar.show();
                         makeFavorite(movieParceable);
                     }
                 }
@@ -161,7 +162,6 @@ public class PosterDetailFragment extends Fragment {
 
     private void makeFavorite(MovieParceable movieParceable) {
 
-        SQLiteDatabase db = feedReaderDbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(FeedReaderContract.FeedEntry.ENTRY_TITLE, movieParceable.getTitle());
@@ -171,25 +171,40 @@ public class PosterDetailFragment extends Fragment {
         values.put(FeedReaderContract.FeedEntry.ENTRY_DATE, movieParceable.getRelease_date());
         values.put(FeedReaderContract.FeedEntry.ENTRY_POSTER, getImageBuffer(movieImage));
         db.insert(FeedReaderContract.FeedEntry.TABLE_NAME, null, values);
+
+        Snackbar snackbar = Snackbar
+                .make(nestedScrollView, movieParceable.getTitle() + " Added to Favorites", Snackbar.LENGTH_LONG);
+
+        snackbar.show();
     }
 
     private void removeFavorite(MovieParceable movieParceable) {
-
-        SQLiteDatabase db = feedReaderDbHelper.getWritableDatabase();
-
         // Define 'where' part of query.
+
         String selection = FeedReaderContract.FeedEntry.ENTRY_TITLE + " LIKE ?";
 // Specify arguments in placeholder order.
         String[] selectionArgs = { movieParceable.getTitle() };
 // Issue SQL statement.
         db.delete(FeedReaderContract.FeedEntry.TABLE_NAME, selection, selectionArgs);
+
+        Snackbar snackbar = Snackbar
+                .make(nestedScrollView, "Removed " + movieParceable.getTitle() + " from Favorites", Snackbar.LENGTH_LONG);
+
+        snackbar.show();
     }
 
+    public boolean CheckIsDataAlreadyInDBorNot(String TableName,
+                                                      String dbfield, String fieldValue) {
 
-
-
-
-
+        String Query = "Select * from " + TableName + " where " + dbfield + " = \"" + fieldValue + "\";";
+        Cursor cursor = db.rawQuery(Query, null);
+        if(cursor.getCount() <= 0){
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        return true;
+    }
 
     private void afterRenderedPoster(final View view) {
         ViewTreeObserver vto = view.getViewTreeObserver();
@@ -250,6 +265,10 @@ public class PosterDetailFragment extends Fragment {
 
     }
 
+    public interface SetCollapsableInterface
+    {
+        void setCollapse(boolean value);
+    }
 
     private void getPoster(View view) {
         Glide.with(this).load(posterPath).into((ImageView) view);
