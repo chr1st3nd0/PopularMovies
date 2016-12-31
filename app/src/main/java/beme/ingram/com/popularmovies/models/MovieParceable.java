@@ -18,6 +18,8 @@ public class MovieParceable implements Parcelable {
     private String vote_average;
     private  String id;
 
+    public MovieParceable() {}
+
     protected MovieParceable(Parcel in) {
         poster_path = in.readString() ;
         overview = in.readString();

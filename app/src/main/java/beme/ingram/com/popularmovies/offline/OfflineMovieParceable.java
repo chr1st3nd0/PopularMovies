@@ -1,13 +1,14 @@
 package beme.ingram.com.popularmovies.offline;
 
 import android.os.Parcel;
-import android.os.Parcelable;
+
+import beme.ingram.com.popularmovies.models.MovieParceable;
 
 /**
  * Created by chr1s_000 on 11/6/2016.
  */
 
-public class OfflineMovieParceable implements Parcelable {
+public class OfflineMovieParceable extends MovieParceable {
 
     private String poster_path;
     private String backdrop_path;

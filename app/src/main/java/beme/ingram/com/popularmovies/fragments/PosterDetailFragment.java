@@ -118,6 +118,7 @@ public class PosterDetailFragment extends Fragment {
             voteAverage.setText(movieParceable.getVote_average());
             releaseDate.setText(getActivity().getResources().getString(R.string.released_label) + " " + Utils.formatDate(movieParceable.getRelease_date()));
 
+            favoriteSet(movieParceable);
 
         }
         else
@@ -138,26 +139,50 @@ public class PosterDetailFragment extends Fragment {
 
             afterRenderedPoster(movieImage);
 
-            favHeart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    if(CheckIsDataAlreadyInDBorNot(FeedReaderContract.FeedEntry.TABLE_NAME, FeedReaderContract.FeedEntry.ENTRY_TITLE,movieParceable.getTitle()))
-                    {
-                        removeFavorite(movieParceable);
-                    }
-                    else
-                    {
-                        makeFavorite(movieParceable);
-                    }
-                }
-            });
+            favoriteSet(movieParceable);
 
             runVolley(movieParceable.getId());
-
         }
 
         return rootView;
+    }
+
+    private void favoriteSet(final MovieParceable movieParceable)
+    {
+        if(CheckIsDataAlreadyInDBorNot(FeedReaderContract.FeedEntry.TABLE_NAME, FeedReaderContract.FeedEntry.ENTRY_TITLE,movieParceable.getTitle()))
+        {
+            loveIt();
+        }
+
+        favHeart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(CheckIsDataAlreadyInDBorNot(FeedReaderContract.FeedEntry.TABLE_NAME, FeedReaderContract.FeedEntry.ENTRY_TITLE,movieParceable.getTitle()))
+                {
+                    removeFavorite(movieParceable);
+                    unloveIt();
+                }
+                else
+                {
+                    makeFavorite(movieParceable);
+                    loveIt();
+                }
+            }
+        });
+    }
+
+
+    private void loveIt()
+    {
+        favHeart.setImageResource(R.drawable.ic_favorite_white_24px);
+        favHeart.setColorFilter(getActivity().getResources().getColor(R.color.gold));
+    }
+
+    private void unloveIt()
+    {
+        favHeart.setImageResource(R.drawable.ic_favorite_border_white_24px);
+        favHeart.setColorFilter(getActivity().getResources().getColor(R.color.gold));
     }
 
     private void makeFavorite(MovieParceable movieParceable) {
@@ -179,12 +204,8 @@ public class PosterDetailFragment extends Fragment {
     }
 
     private void removeFavorite(MovieParceable movieParceable) {
-        // Define 'where' part of query.
-
         String selection = FeedReaderContract.FeedEntry.ENTRY_TITLE + " LIKE ?";
-// Specify arguments in placeholder order.
         String[] selectionArgs = { movieParceable.getTitle() };
-// Issue SQL statement.
         db.delete(FeedReaderContract.FeedEntry.TABLE_NAME, selection, selectionArgs);
 
         Snackbar snackbar = Snackbar

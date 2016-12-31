@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -39,6 +40,7 @@ public class MoviePostersRatedFragment extends Fragment {
     View rootView;
     @BindView(R.id.poster_recycler)RecyclerView posterRecycler;
     PoserAdapter poserAdapter;
+    @BindView(R.id.retry_button)Button retryButton;
 
 
     public MoviePostersRatedFragment() {
@@ -50,15 +52,36 @@ public class MoviePostersRatedFragment extends Fragment {
         rootView = inflater.inflate(R.layout.movie_poster_layout, container, false);
         ButterKnife.bind(this,rootView);
 
+        if(Utils.checkConnection(getActivity()))
+        {
+            init();
+        }
+        else
+        {
+            retryButton.setVisibility(View.VISIBLE);
+            retryButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(Utils.checkConnection(getActivity()))
+                    {
+                        init();
+                        retryButton.setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
+
+
+        return rootView;
+    }
+
+
+    private void init()
+    {
         movies = new ArrayList<>();
-
-
-
         runVolley();
         posterRecycler.setLayoutManager(new GridLayoutManager(getActivity(),2));
         posterRecycler.setHasFixedSize(true);
-
-        return rootView;
     }
 
 

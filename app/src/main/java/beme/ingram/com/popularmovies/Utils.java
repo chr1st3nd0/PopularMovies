@@ -1,6 +1,9 @@
 package beme.ingram.com.popularmovies;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
@@ -39,6 +42,18 @@ public class Utils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static boolean checkConnection(Context context)
+    {
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        return isConnected;
     }
 
     public static byte[] getImageBuffer(ImageView imageView)
