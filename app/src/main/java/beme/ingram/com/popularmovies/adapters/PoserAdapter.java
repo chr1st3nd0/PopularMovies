@@ -64,18 +64,9 @@ public class PoserAdapter extends RecyclerView.Adapter<PoserAdapter.ViewHolder> 
         Display display = ((Activity)mContext).getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        int width = size.x / 2;
-        int height = size.y / 2;
+
         holder.posterImage.requestLayout();
 
-
-        // Apply the new height for ImageView programmatically
-//        holder.posterImage.getLayoutParams().height = height;
-//
-//        // Apply the new width for ImageView programmatically
-//        holder.posterImage.getLayoutParams().width = width;
-
-        // Set the scale type for ImageView image scaling
         holder.posterImage.setScaleType(ImageView.ScaleType.FIT_XY);
 
         Glide.with(mContext).load(mMovies.get(position).getPosterPath()).into(holder.posterImage);

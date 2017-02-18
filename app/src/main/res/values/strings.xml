@@ -18,5 +18,7 @@
     <string name="text_review">Reviews</string>
     <string name="text_trailer">Trailers</string>
 
+    <bool name="isTablet">false</bool>
+
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

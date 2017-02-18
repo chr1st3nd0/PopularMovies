@@ -99,10 +99,11 @@ public class PosterDetailFragment extends Fragment {
         SetCollapsableInterface setCollapsableInterface = (SetCollapsableInterface) getActivity();
 
 
+
         if(bundle.getParcelable("myData") instanceof OfflineMovieParceable)
         {
             final OfflineMovieParceable movieParceable = bundle.getParcelable("myData");
-            setCollapsableInterface.setCollapse(false);
+          //  setCollapsableInterface.setCollapse(false);
 
             trailerHeader.setVisibility(View.GONE);
             trailerRecycler.setVisibility(View.GONE);

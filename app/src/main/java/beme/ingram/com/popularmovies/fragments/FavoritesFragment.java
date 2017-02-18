@@ -46,7 +46,13 @@ public class FavoritesFragment extends Fragment {
         movies = new ArrayList<>();
 
         getFavorites();
-        favoriteRecycler.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        if(!getActivity().getResources().getBoolean(R.bool.isTablet)) {
+            favoriteRecycler.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        }
+        else
+        {
+            favoriteRecycler.setLayoutManager(new GridLayoutManager(getActivity(), 4));
+        }
         favoriteRecycler.setHasFixedSize(true);
 
         return rootView;

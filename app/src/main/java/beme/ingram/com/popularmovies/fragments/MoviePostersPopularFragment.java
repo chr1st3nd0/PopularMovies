@@ -84,7 +84,13 @@ public class MoviePostersPopularFragment extends Fragment {
     {
         movies = new ArrayList<>();
         runVolley();
-        posterRecycler.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        if(!getActivity().getResources().getBoolean(R.bool.isTablet)) {
+            posterRecycler.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        }
+        else
+        {
+            posterRecycler.setLayoutManager(new GridLayoutManager(getActivity(), 4));
+        }
         posterRecycler.setHasFixedSize(true);
     }
 

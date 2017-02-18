@@ -3,7 +3,9 @@ package beme.ingram.com.popularmovies.fragments;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,6 +29,7 @@ import beme.ingram.com.popularmovies.DividerItemDecoration;
 import beme.ingram.com.popularmovies.R;
 import beme.ingram.com.popularmovies.Utils;
 import beme.ingram.com.popularmovies.adapters.ReviewsAdapter;
+import beme.ingram.com.popularmovies.adapters.TabAdapter;
 import beme.ingram.com.popularmovies.models.MovieParceable;
 import beme.ingram.com.popularmovies.models.Review;
 import butterknife.BindView;
@@ -42,8 +45,9 @@ public class ReviewFragment extends Fragment {
     View rootView;
     ArrayList<Review> reviews;
     ReviewsAdapter reviewsAdapter;
-    @BindView(R.id.review_recycler
-    ) RecyclerView reviewsRecycler;
+    @BindView(R.id.review_recycler) RecyclerView reviewsRecycler;
+    ViewPager viewPager;
+    TabLayout tabLayout;
 
     public ReviewFragment() {
         // Required empty public constructor
@@ -59,17 +63,40 @@ public class ReviewFragment extends Fragment {
         ButterKnife.bind(this,rootView);
         reviews = new ArrayList();
 
-
         Bundle bundle = this.getArguments();
-        MovieParceable movieParceable = bundle.getParcelable("myData");
+        if(bundle != null) {
+            MovieParceable movieParceable = bundle.getParcelable("myData");
+            runVolley(movieParceable.getId());
+        }
+
+//        viewPager = (ViewPager) rootView.findViewById(R.id.viewpager_create);
+//        setupViewPager(viewPager);
+
+
+
+//        tabLayout = (TabLayout) rootView.findViewById(R.id.tab_layout);
+//        tabLayout.post(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                tabLayout.setupWithViewPager(viewPager);
+//            }
+//        });
 
         reviewsRecycler.setHasFixedSize(true);
         reviewsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         reviewsRecycler.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL_LIST));
 
 
-        runVolley(movieParceable.getId());
         return rootView;
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        TabAdapter adapter = new TabAdapter(getActivity().getSupportFragmentManager());
+        adapter.addFragment(new MoviePostersPopularFragment(),getResources().getString(R.string.popular_rated_label));
+        adapter.addFragment(new MoviePostersRatedFragment(), getResources().getString(R.string.highest_rated_label));
+        adapter.addFragment(new FavoritesFragment(), "Favorites");
+        viewPager.setAdapter(adapter);
     }
 
 

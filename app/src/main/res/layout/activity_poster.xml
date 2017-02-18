@@ -27,7 +27,7 @@
                 android:id="@+id/backdrop"
                 android:scaleType="fitXY"
                 android:layout_width="fill_parent"
-                android:layout_height="200dp"
+                android:layout_height="@dimen/banner_height"
                 android:background="@android:color/transparent"
                 app:layout_collapseMode="parallax" />
 

@@ -49,8 +49,6 @@ public class PosterActivity extends AppCompatActivity implements YoutubeAdapter.
         ButterKnife.bind(this);
         Bundle bundle = getIntent().getExtras();
 
-
-
         if(bundle.getParcelable("myData") instanceof OfflineMovieParceable)
         {
             OfflineMovieParceable movieParceable = bundle.getParcelable("myData");
